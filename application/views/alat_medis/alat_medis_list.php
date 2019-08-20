@@ -47,7 +47,8 @@
                 <tr>
 			<td width="80px"><?php echo ++$start ?></td>
 			<td><?php echo $alat_medis->nama_alat ?></td>
-			<td><a href="#" class="pop"><img width="50" height="50" src="<?php echo base_url(); ?>upload/foto_alat/<?php echo $alat_medis->foto_alat ?>"></a></td>
+			<!-- <td><a href="#" class="pop"><img width="50" height="50" src="<?php echo base_url(); ?>upload/foto_alat/<?php //echo $alat_medis->foto_alat ?>"></a></td> -->
+            <td><a href="#" class="pop"><img width="50" height="50" src="https://invendis.s3.amazonaws.com/<?php  $picaalat = str_replace(' ', '+', $alat_medis->foto_alat); echo $picaalat ?>"></a></td>
 			<td><?php echo $alat_medis->jumlah ?></td>
 			<td><?php echo $alat_medis->tanggal_alat_medis ?></td>
 			<td><?php echo $alat_medis->nama_jenis ?></td>

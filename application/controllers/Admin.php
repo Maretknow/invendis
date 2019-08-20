@@ -91,6 +91,19 @@ class Admin extends CI_Controller
     
     public function create_action() 
     {
+        /*fungsi autoload aws*/
+        require 'application/vendor/autoload.php';
+        $s3 = new Aws\S3\S3Client([
+            'region'  => 'us-east-1',
+            'version' => 'latest',
+            'credentials' => [
+                'key'    => "ASIA327OVDALPWIUUSHZ",
+                'secret' => "n/NW01qduAeZ5X1IA3iqmil/bDH00N4S1y7O0e4+",
+                'token' => "FQoGZXIvYXdzECQaDArfxFTZBNOI+ucKgSLrBFOP1fMczbUnAwFxLgYgqBhdykiYTCTPCpyeZrKZnTiiMxRteHoWyw+mUoIHF2hgAC3UX+i4LR+zl5gJyMcGnJW92P1pP5AwRVWmiiEf1zLs3zJ5Mn+qnExoeFkB1s6pIOmUEzfz10dde/qEHRAAj0mpfmh3nBhJshp43YDfYTd/hvqwqKFJXwlA5BoW7J+O3hNd2lZMy1N/TWzSaQ3luXa7iakfFdfmimoj/7Slm8OD/211CPyYwOD+L49h0/eLJORSyDFRgiB8356Q1qAlqZqeHlN+dK2bGmPmYvKZafDEROIugsL4B08GrzO2Q4MERLSES4lrcNsijCGgJn+CPSt+KZea2jxjDeJp8RQt8WDK3CY5RizXXc+yMAhlcQDpvD3EhfX/SZWFE5DjAxX4JdLOc0V522LpUe0GRVepmPBFkyTSVFCcoeDbeCn7PAT/PohE+QSyCYLIGbGIvq2S1Mh//3gngHSBBSKmlZ9kA6UwEFsZJnqJg1TUf5xUW9819NsrHhM+XKOjH2vuxPdCjBDZjDy87snWELbFijCQublD/Sgr5u9xwHloOrBq1gNbL3zS3g6pNruPd97uhfX2s4+TW6GCGCC78G9jfRE4j+MsAy6Cqk88+4FUHIvWkTiCRUUFQV85VUr90U15qOwUAq4N6RzZOFzZi4BF3FwNzhlv5nzl7dnVvvXpTWtCD0xdPMmtNLr9lzWs8WeAmE0e2KfKgrMjj3OXT9+LDqJ5JoQ4zr9Pvfeba/mbkTlElQ7+IOYOcZEunGjLH6T7+ZJKrR8xKx1r67jLMO5qKq4fqziIruLvnVCWlrKCLe4oy/Dw6gU="
+            ],
+        ]);
+
+
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
@@ -104,21 +117,33 @@ class Admin extends CI_Controller
 		'role' => $this->input->post('role',TRUE),
 	    );
             if ($_FILES['foto_admin']['name']!=null || $_FILES['foto_admin']['name']!='') {
-                    $config['upload_path']          = './upload/foto_admin/';
+                    //$config['upload_path']          = './upload/foto_admin/';
                     $config['allowed_types']        = 'jpeg|png|jpg';
                     $config['overwrite']            = true;
                     
-            
+                    $file_name = $_FILES['foto_admin']['name'];   
+                    $temp_file_location = $_FILES['foto_admin']['tmp_name'];
+                    
+                    $result = $s3->putObject([
+                    'Bucket' => 'invendis',
+                    'ACL' => 'public-read',
+                    'Key'    => $file_name,
+                    'SourceFile' => $temp_file_location         
+                    ]);
+
+
+
                     $this->load->library('upload', $config);
                     $this->upload->initialize($config);
-                    if (!$this->upload->do_upload('foto_admin')){  
+                    //if (!$this->upload->do_upload('foto_admin')){  
                        // $this->update();
-                        var_dump($config);
-                        die();
-                    }
-                    else{
-                        $data['foto_admin'] = $this->upload->data('file_name');
-                    }
+                    //    var_dump($config);
+                    //    die();
+                    //}
+                    //else{
+                        //$data['foto_admin'] = $this->upload->data('file_name');
+                    $data['foto_admin'] =  $file_name;
+                    //}
         }
             if ($_SESSION['role'] != 'Admin') {
                 $this->session->set_flashdata('message', 'Gagal, Action Not Autorize For User Account');
@@ -158,6 +183,18 @@ class Admin extends CI_Controller
     
     public function update_action() 
     {
+        /*fungsi autoload aws*/
+        require 'application/vendor/autoload.php';
+        $s3 = new Aws\S3\S3Client([
+            'region'  => 'us-east-1',
+            'version' => 'latest',
+            'credentials' => [
+                'key'    => "ASIA327OVDALPWIUUSHZ",
+                'secret' => "n/NW01qduAeZ5X1IA3iqmil/bDH00N4S1y7O0e4+",
+                'token' => "FQoGZXIvYXdzECQaDArfxFTZBNOI+ucKgSLrBFOP1fMczbUnAwFxLgYgqBhdykiYTCTPCpyeZrKZnTiiMxRteHoWyw+mUoIHF2hgAC3UX+i4LR+zl5gJyMcGnJW92P1pP5AwRVWmiiEf1zLs3zJ5Mn+qnExoeFkB1s6pIOmUEzfz10dde/qEHRAAj0mpfmh3nBhJshp43YDfYTd/hvqwqKFJXwlA5BoW7J+O3hNd2lZMy1N/TWzSaQ3luXa7iakfFdfmimoj/7Slm8OD/211CPyYwOD+L49h0/eLJORSyDFRgiB8356Q1qAlqZqeHlN+dK2bGmPmYvKZafDEROIugsL4B08GrzO2Q4MERLSES4lrcNsijCGgJn+CPSt+KZea2jxjDeJp8RQt8WDK3CY5RizXXc+yMAhlcQDpvD3EhfX/SZWFE5DjAxX4JdLOc0V522LpUe0GRVepmPBFkyTSVFCcoeDbeCn7PAT/PohE+QSyCYLIGbGIvq2S1Mh//3gngHSBBSKmlZ9kA6UwEFsZJnqJg1TUf5xUW9819NsrHhM+XKOjH2vuxPdCjBDZjDy87snWELbFijCQublD/Sgr5u9xwHloOrBq1gNbL3zS3g6pNruPd97uhfX2s4+TW6GCGCC78G9jfRE4j+MsAy6Cqk88+4FUHIvWkTiCRUUFQV85VUr90U15qOwUAq4N6RzZOFzZi4BF3FwNzhlv5nzl7dnVvvXpTWtCD0xdPMmtNLr9lzWs8WeAmE0e2KfKgrMjj3OXT9+LDqJ5JoQ4zr9Pvfeba/mbkTlElQ7+IOYOcZEunGjLH6T7+ZJKrR8xKx1r67jLMO5qKq4fqziIruLvnVCWlrKCLe4oy/Dw6gU="
+            ],
+        ]);
+
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
@@ -170,6 +207,36 @@ class Admin extends CI_Controller
 		'username_admin' => $this->input->post('username_admin',TRUE),
 		'role' => $this->input->post('role',TRUE),
 	    );
+            if ($_FILES['foto_admin']['name']!=null || $_FILES['foto_admin']['name']!='') {
+                    //$config['upload_path']          = './upload/foto_admin/';
+                    $config['allowed_types']        = 'jpeg|png|jpg';
+                    $config['overwrite']            = true;
+                    
+                    $file_name = $_FILES['foto_admin']['name'];   
+                    $temp_file_location = $_FILES['foto_admin']['tmp_name'];
+                    
+                    $result = $s3->putObject([
+                    'Bucket' => 'invendis',
+                    'ACL' => 'public-read',
+                    'Key'    => $file_name,
+                    'SourceFile' => $temp_file_location         
+                    ]);
+
+
+
+                    $this->load->library('upload', $config);
+                    $this->upload->initialize($config);
+                    //if (!$this->upload->do_upload('foto_admin')){  
+                       // $this->update();
+                    //    var_dump($config);
+                    //    die();
+                    //}
+                    //else{
+                        //$data['foto_admin'] = $this->upload->data('file_name');
+                    $data['foto_admin'] =  $file_name;
+                    //}
+        }            
+
             if ($_SESSION['role'] != 'Admin') {
                 $this->session->set_flashdata('message', 'Gagal, Action Not Autorize For User Account');
                 redirect(site_url('admin'));

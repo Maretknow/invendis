@@ -39,13 +39,15 @@
 		<th>Username Admin</th>
 		<th>Role</th>
 		<th>Action</th>
-            </tr><?php
+            </tr><?php foreach ($admin_data as $admin)
             {
                 ?>
                 <tr>
 			<td width="80px"><?php echo ++$start ?></td>
 			<td><?php echo $admin->nama_admin ?></td>
-			<td><a href="#" class="pop"><img width="50" height="50" src="<?php echo base_url(); ?>upload/foto_admin/<?php echo $admin->foto_admin ?>"></a></td> 
+			<!-- <td><a href="#" class="pop"><img width="50" height="50" src="<?php echo base_url(); ?>upload/foto_admin/<?php// echo $admin->foto_admin ?>"></a></td> -->
+
+             <td><a href="#" class="pop"><img width="50" height="50" src="https://invendis.s3.amazonaws.com/<?php  $picadmin = str_replace(' ', '+', $admin->foto_admin); echo $picadmin ?>"></a></td> 
 			<td><?php $pass=strlen($admin->password_admin); echo str_repeat("*", $pass); ?></td>
 			<td><?php echo $admin->username_admin ?></td>
 			<td><?php echo $admin->role ?></td>
