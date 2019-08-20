@@ -1,0 +1,7 @@
+## Update ##
+invendis_v1 - 2019/08/15
+* [add] Menambahkan Create, Read, Update, Delete Puskesmas
+* [add] Menambahkan data puskesmas ke dalam relasi Alat Medis
+* [fix] foto hilang saat update admin dan alat medis
+* [change] Mematikan fungsi create, update, delete admin pada role user
+* [change] Menyembunyikan password admin yang terlihat pada admin list.
